@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Users } from "lucide-react";
 import { ChatContext } from "../context/ChatContext";
 import { AuthContext } from "../context/AuthContext";
-import SidebarSkeleton from "./skeletons/SidebarSkeleton";
+import SidebarSkeleton from "./Skeletons/SidebarSkeleton";
 
 export default function Sidebar() {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useContext(ChatContext);
