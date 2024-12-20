@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000",
-    // baseURL : 'https://chat-appb.up.railway.app/api',
+    // baseURL: "http://localhost:3000",
+    baseURL : 'https://chatifyy.up.railway.app',
     withCredentials: true,
 });
