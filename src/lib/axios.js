@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    // baseURL: "http://localhost:3000",
-    baseURL : 'https://chatifyy.up.railway.app',
+    baseURL: import.meta.env.VITE_BASE_URL || "http://localhost:3000",
     withCredentials: true,
 });

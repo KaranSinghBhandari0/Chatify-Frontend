@@ -7,7 +7,7 @@ export const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
 
-    const {socket} = useContext(AuthContext);
+    const {user,socket} = useContext(AuthContext);
 
     const [messages, setMessages] = useState([]);
     const [users, setUsers] = useState([]);
@@ -70,6 +70,17 @@ export const ChatProvider = ({ children }) => {
         socket.off("newMessage");
     };
 
+    // clear chat
+    const clearChat = async () => {
+        const receiverId = selectedUser._id;
+        try {
+            const res = await axiosInstance.get(`/messages/clearChat/${receiverId}`);
+            await getMessages(user._id);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <ChatContext.Provider value={{
             messages,
@@ -83,6 +94,7 @@ export const ChatProvider = ({ children }) => {
             getMessages,
             subscribeToMessages,
             unsubscribeFromMessages,
+            clearChat
         }}>
             {children}
         </ChatContext.Provider>

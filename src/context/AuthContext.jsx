@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-    const BASE_URL = "https://chatifyy.up.railway.app";
+    const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
     
     const [user , setUser] = useState(null);
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -17,6 +17,11 @@ export const AuthProvider = ({ children }) => {
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+    const [openForgotPassword, setOpenForgotPassword] = useState(false);
+    const [openOTPModal, setOpenOTPModal] = useState(false);
+    const [openNewPassword, setOpenNewPassword] = useState(false);
+    const [email , setEmail] = useState('');
 
     const [socket, setSocket] = useState(null);
 
@@ -121,10 +126,65 @@ export const AuthProvider = ({ children }) => {
             setOnlineUsers([]);
         }
     };
-    
+
+    // update Profile
+    const updatePassword = async (data) => {
+        try {
+            const res = await axiosInstance.post("/auth/updatePassword", data);
+            toast.success("password Updated");
+        } catch (error) {
+            console.log("error in update profile:", error);
+            toast.error(error.response?.data?.message || "Password Update failed");
+        }
+    }
+
+    // forgot password
+    const forgotPassword = async () => {
+        try {
+            const res = await axiosInstance.post("/auth/send-otp", {email});
+            toast.success(res.data.message);
+            setOpenForgotPassword(false);
+            setOpenOTPModal(true);
+        } catch (error) {
+            console.log("error in sending OTP:", error);
+            toast.error(error.response?.data?.message || "failed to send otp");
+        }
+    }
+
+    // otp verifying
+    const handleVerifyOTP = async (otp) => {
+        try {
+            const res = await axiosInstance.post("/auth/verify-otp", {otp, email});
+            toast.success(res.data.message);
+            setOpenForgotPassword(false);
+            setOpenOTPModal(false);
+            setOpenNewPassword(true);
+        } catch (error) {
+            console.error("Error in verifying OTP:", error);
+            toast.error(error.response?.data?.message || "Failed to verify OTP");
+        }
+    };
+
+    // otp verifying
+    const resetPassword = async (newPassword, confirmNewPassword) => {
+        try {
+            const res = await axiosInstance.post("/auth/resetPassword", {email, newPassword, confirmNewPassword});
+            toast.success(res.data.message);
+            navigate('/login');
+        } catch (error) {
+            console.error("Error in resetting password:", error);
+            toast.error(error.response?.data?.message || "Failed to reset password");
+        } finally {
+            setOpenForgotPassword(false);
+            setOpenOTPModal(false);
+            setOpenNewPassword(false);
+            setEmail(false);
+        }
+    };
+
     return (
         <AuthContext.Provider value={{
-            user, isSigningUp, isLoggingIn, isCheckingAuth, isUpdatingProfile, onlineUsers, theme, setTheme, isAuthenticated, signup, login, logout, updateProfile, socket, connectSocket
+            user, isSigningUp, isLoggingIn, isCheckingAuth, isUpdatingProfile, onlineUsers, theme, setTheme, isAuthenticated, signup, login, logout, updateProfile, socket, connectSocket, updatePassword, forgotPassword, handleVerifyOTP, openForgotPassword, setOpenForgotPassword, openOTPModal, setOpenOTPModal, openNewPassword, setOpenNewPassword, email , setEmail, resetPassword
         }}>
             {children}
         </AuthContext.Provider>

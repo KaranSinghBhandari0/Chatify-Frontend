@@ -2,12 +2,14 @@ import { useContext, useState } from "react";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import ForgotPassword from "../components/ForgotPassword.";
 
 export default function Login() {
   
-  const { login, isLoggingIn } = useContext(AuthContext);
+  const { login, isLoggingIn, setOpenForgotPassword } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -96,8 +98,10 @@ export default function Login() {
               "Login"
             )}
           </button>
-        </form>
+          <p className="inline-block text-primary cursor-pointer" onClick={() => {setOpenForgotPassword(true); setFormData({ email: "", password: "" });}}>forgot password?</p>
 
+        </form>
+      
         <div className="text-center">
           <p className="text-base-content/60">
             Don&apos;t have an account?{" "}
@@ -107,6 +111,8 @@ export default function Login() {
           </p>
         </div>
       </div>
+
+      <ForgotPassword />
     </div>
   )
 }
