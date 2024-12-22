@@ -8,7 +8,9 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-    const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+    const BASE_URL = "https://chatifyy.up.railway.app";
+    // const BASE_URL = "http://localhost:3000";
+
     
     const [user , setUser] = useState(null);
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);

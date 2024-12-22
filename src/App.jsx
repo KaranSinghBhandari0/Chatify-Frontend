@@ -16,8 +16,6 @@ import { AuthContext } from "./context/AuthContext";
 export default function App() {
   const {user, isAuthenticated, isCheckingAuth, theme, connectSocket} = useContext(AuthContext);
 
-  console.log(import.meta.env.VITE_BACKEND_URL)
-
   // auth check
   useEffect(()=> {
     isAuthenticated();
