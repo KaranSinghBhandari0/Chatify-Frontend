@@ -81,6 +81,16 @@ export const ChatProvider = ({ children }) => {
         }
     };
 
+    // search User
+    const searchUser = async (searchInput) => {
+        try {
+            const res = await axiosInstance.post('/messages/searchUser', { searchInput });
+            return (res.data.users || []);
+        } catch (err) {
+            console.error('Failed to fetch users:', err);
+        }
+    };
+
     return (
         <ChatContext.Provider value={{
             messages,
@@ -94,7 +104,8 @@ export const ChatProvider = ({ children }) => {
             getMessages,
             subscribeToMessages,
             unsubscribeFromMessages,
-            clearChat
+            clearChat,
+            searchUser
         }}>
             {children}
         </ChatContext.Provider>

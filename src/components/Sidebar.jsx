@@ -1,13 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import { Users } from "lucide-react";
+import { Menu, Users } from "lucide-react";
 import { ChatContext } from "../context/ChatContext";
 import { AuthContext } from "../context/AuthContext";
 import SidebarSkeleton from "./Skeletons/SidebarSkeleton";
+import SearchModal from "./SearchModal";
 
 export default function Sidebar() {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useContext(ChatContext);
   const { user, onlineUsers } = useContext(AuthContext);
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+  const [searchModal , setSearchModal] = useState(false);
 
   useEffect(() => {
     getUsers();
@@ -25,11 +27,23 @@ export default function Sidebar() {
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
       <div className="border-b border-base-300 w-full p-5">
-        <div className="flex items-center gap-2">
-          <Users className="size-6" />
+        <div className="flex items-center gap-2 justify-between">
+          <Users className="size-6 hidden lg:block" />
           <span className="font-medium hidden lg:block">Contacts</span>
+          <div className="dropdown">
+            <div tabIndex={0} role="button">
+            <Menu className="size-6" />
+            </div>
+            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-44 p-2 shadow">
+              <li><a onClick={()=> setSearchModal(true)} >add new friend</a></li>
+              <li><a onClick={()=> setSearchModal(true)}>Search a user</a></li>
+            </ul>
+          </div>
         </div>
-        {/* TODO: Online filter toggle */}
+
+        <SearchModal searchModal={searchModal} setSearchModal={setSearchModal} />
+
+        {/* Online filter toggle */}
         <div className="mt-3 hidden lg:flex items-center gap-2">
           <label className="cursor-pointer flex items-center gap-2">
             <input
