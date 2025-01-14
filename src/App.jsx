@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 
 import { AuthContext } from "./context/AuthContext";
+import Popup from "./components/Popup";
 
 export default function App() {
   const {user, isAuthenticated, isCheckingAuth, theme, connectSocket} = useContext(AuthContext);
@@ -39,7 +40,8 @@ export default function App() {
 
   return (
     <div>
-      <Navbar/>
+        <Popup/>
+        <Navbar/>
         <Routes>
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
           <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
